@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>球球联动限定抽奖</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FF6B6B',
+            secondary: '#4ECDC4',
+            accent: '#FFD166',
+            light: '#F7FFF7',
+            dark: '#2A2D34'
+          },
+        },
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .prize-card {
+        @apply w-full aspect-square rounded-lg bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center text-center p-2 transition-all duration-300 hover:scale-105 shadow-md;
+      }
+      .spin-btn {
+        @apply w-24 h-24 rounded-full bg-primary text-white font-bold text-xl flex items-center justify-center shadow-lg hover:bg-primary/90 transition-all duration-300 transform hover:scale-105;
+      }
+      .spin-btn-disabled {
+        @apply bg-gray-400 cursor-not-allowed hover:bg-gray-400 hover:scale-100;
+      }
+      .result-card {
+        @apply bg-white/90 backdrop-blur-md rounded-xl p-6 text-center shadow-xl;
+      }
+      .history-item {
+        @apply flex items-center justify-between p-3 border-b border-gray-200;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-light to-secondary min-h-screen flex flex-col items-center">
+  <div class="container mx-auto px-4 py-8 max-w-4xl">
+    <!-- 标题区域 -->
+    <header class="text-center mb-8 w-full">
+      <h1 class="text-[clamp(2rem,4vw,3rem)] font-bold text-dark mb-2">球球联动限定抽奖</h1>
+      <p class="text-gray-600 mb-6">活动时间: <span class="text-primary font-semibold">2025年11月01日 - 2025年12月31日</span></p>
+      <div class="bg-gray-100/70 p-3 rounded-lg inline-block">
+        <p class="text-sm text-gray-600"><i class="fa fa-info-circle text-primary mr-1"></i>每日可抽奖3次，丰厚奖励等你来拿！</p>
+      </div>
+    </header>
+
+    <!-- 抽奖区域 -->
+    <main class="flex flex-col items-center w-full">
+      <!-- 九宫格奖品区 -->
+      <div class="grid grid-cols-3 gap-3 w-full max-w-md mb-8">
+        <!-- 第一行 -->
+        <div class="prize-card" data-prize="3888金蘑菇">
+          <img src="images/prize/金蘑菇.png" alt="金蘑菇" class="w-16 h-16 mb-1">
+          <p class="text-dark font-semibold">金蘑菇</p>
+          <p class="text-gray-600 text-sm">3888个</p>
+        </div>
+        <div class="prize-card" data-prize="365天年卡会员">
+          <img src="images/prize/月卡会员.png" alt="年卡会员" class="w-16 h-16 mb-1">
+          <p class="text-dark font-semibold">年卡会员</p>
+          <p class="text-gray-600 text-sm">365天</p>
+        </div>
+        <div class="prize-card" data-prize="666龙晶">
+          <img src="images/prize/龙晶.png" alt="龙晶" class="w-16 h-16 mb-1">
+          <p class="text-dark font-semibold">龙晶</p>
+          <p class="text-gray-600 text-sm">666个</p>
+        </div>
+        
+        <!-- 第二行 -->
+        <div class="prize-card" data-prize="99超大钥匙">
+          <img src="images/prize/超大钥匙.png" alt="超大钥匙" class="w-16 h-16 mb-1">
+          <p class="text-dark font-semibold">超大钥匙</p>
+          <p class="text-gray-600 text-sm">99个</p>
+        </div>
+        
+        <!-- 中间抽奖按钮 -->
+        <div class="flex items-center justify-center">
+          <button id="spin-btn" class="spin-btn">
+            开始抽奖
+          </button>
+        </div>
+        
+        <div class="prize-card" data-prize="嘉年华孢子1个">
+          <img src="images/prize/嘉年华孢子.png" alt="嘉年华孢子" class="w-16 h-16 mb-1">
+          <p class="text-dark font-semibold">嘉年华孢子</p>
+          <p class="text-gray-600 text-sm">1个</p>
+        </div>
+        
+        <!-- 第三行 -->
+        <div class="prize-card" data-prize="980金蘑菇">
+          <img src="images/prize/金蘑菇.png" alt="金蘑菇" class="w-16 h-16 mb-1">
+          <p class="text-dark font-semibold">金蘑菇</p>
+          <p class="text-gray-600 text-sm">980个</p>
+        </div>
+        <div class="prize-card" data-prize="黑暗之手皮肤">
+          <img src="images/prize/黑暗之手.png" alt="黑暗之手" class="w-16 h-16 mb-1">
+          <p class="text-dark font-semibold">黑暗之手</p>
+          <p class="text-gray-600 text-sm">皮肤</p>
+        </div>
+        <div class="prize-card" data-prize="15超大钥匙">
+          <img src="images/prize/超大钥匙.png" alt="超大钥匙" class="w-16 h-16 mb-1">
+          <p class="text-dark font-semibold">超大钥匙</p>
+          <p class="text-gray-600 text-sm">15个</p>
+        </div>
+      </div>
+
+      <!-- 抽奖次数和记录按钮 -->
+      <div class="flex items-center justify-between w-full max-w-md mb-8">
+        <div class="flex items-center">
+          <i class="fa fa-star text-accent text-xl mr-2"></i>
+          <span class="text-dark font-semibold">剩余次数: <span id="remain-count">3</span></span>
+        </div>
+        <button id="history-btn" class="bg-secondary hover:bg-secondary/90 text-white font-bold py-2 px-4 rounded transition-colors">
+          <i class="fa fa-history mr-1"></i>抽奖记录
+        </button>
+      </div>
+      
+      <!-- 次数进度条 -->
+      <div class="w-full max-w-md mb-8">
+        <div class="w-full bg-gray-200 rounded-full h-2.5">
+          <div id="count-progress" class="h-full bg-primary rounded-full" style="width: 100%"></div>
+        </div>
+        <div id="no-chances" class="text-center text-red-500 font-semibold mt-2 hidden">
+          <i class="fa fa-exclamation-circle mr-1"></i>今日抽奖次数已用尽！
+        </div>
+      </div>
+
+      <!-- 中奖结果 -->
+      <div id="result-panel" class="result-card hidden w-full max-w-md mb-8">
+        <h2 class="text-2xl font-bold text-primary mb-4">恭喜中奖！</h2>
+        <img id="prize-img" src="" alt="中奖奖品" class="w-24 h-24 mx-auto mb-4">
+        <p class="text-xl mb-6" id="prize-name">获得神秘奖励</p>
+        <div class="bg-gray-100 p-3 rounded-lg mb-4">
+          <p class="text-gray-600 mb-2">礼包兑换码</p>
+          <div class="flex items-center justify-center">
+            <span id="code" class="text-lg font-mono font-bold bg-white px-3 py-1 rounded">XXXX-XXXX-XXXX</span>
+          </div>
+        </div>
+        <button id="copy-btn" class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-2 px-4 rounded transition-colors">
+          <i class="fa fa-copy mr-1"></i>复制兑换码
+        </button>
+      </div>
+    </main>
+
+    <!-- 底部说明 -->
+    <footer class="mt-12 text-center text-gray-500 text-sm w-full">
+      <p>© 2025 球球联动限定活动 版权所有</p>
+      <p class="mt-1">本活动最终解释权归主办方所有</p>
+    </footer>
+  </div>
+
+  <!-- 抽奖记录弹窗 -->
+  <div id="history-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-xl p-6 w-full max-w-md max-h-[80vh] overflow-y-auto">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-xl font-bold text-dark">我的抽奖记录</h3>
+        <button id="close-history" class="text-gray-500 hover:text-gray-700">
+          <i class="fa fa-times text-xl"></i>
+        </button>
+      </div>
+      <div id="history-list" class="space-y-2">
+        <!-- 抽奖记录将动态添加这里 -->
+        <div class="text-center text-gray-500 py-6" id="empty-history">
+          <i class="fa fa-inbox text-4xl mb-2"></i>
+          <p>暂无抽奖记录</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 奖品配置
+    const prizes = [
+      { name: "3888金蘑菇", image: "images/prize/金蘑菇.png", value: 3888 },
+      { name: "980金蘑菇", image: "images/prize/金蘑菇.png", value: 980 },
+      { name: "99超大钥匙", image: "images/prize/超大钥匙.png", value: 99 },
+      { name: "365天年卡会员", image: "images/prize/月卡会员.png", value: 365 },
+      { name: "666龙晶", image: "images/prize/龙晶.png", value: 666 },
+      { name: "嘉年华孢子1个", image: "images/prize/嘉年华孢子.png", value: 1 },
+      { name: "黑暗之手皮肤", image: "images/prize/黑暗之手.png", value: 1 },
+      { name: "15超大钥匙", image: "images/prize/超大钥匙.png", value: 15 }
+    ];
+
+    // 抽奖记录存储
+    let drawHistory = JSON.parse(localStorage.getItem('drawHistory')) || [];
+    
+    // 生成随机兑换码
+    function generateCode() {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let code = '';
+      for (let i = 0; i < 4; i++) {
+        for (let j = 0; j < 4; j++) {
+          code += chars[Math.floor(Math.random() * chars.length)];
+        }
+        if (i < 3) code += '-';
+      }
+      return code;
+    }
+
+    // 复制兑换码
+    function copyCode() {
+      const code = document.getElementById('code').textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        const btn = document.getElementById('copy-btn');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fa fa-check mr-1"></i>已复制';
+        btn.classList.add('bg-green-500');
+        setTimeout(() => {
+          btn.innerHTML = originalText;
+          btn.classList.remove('bg-green-500');
+        }, 2000);
+      });
+    }
+
+    // 添加抽奖记录
+    function addHistory(prize, code) {
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString();
+      const dateStr = now.toLocaleDateString();
+      
+      const historyItem = {
+        prize: prize,
+        code: code,
+        date: dateStr,
+        time: timeStr
+      };
+      
+      drawHistory.unshift(historyItem); // 添加到开头
+      if (drawHistory.length > 10) {
+        drawHistory.pop(); // 只保留最近10条记录
+      }
+      
+      localStorage.setItem('drawHistory', JSON.stringify(drawHistory));
+      updateHistoryList();
+    }
+
+    // 更新抽奖记录列表
+    function updateHistoryList() {
+      const historyList = document.getElementById('history-list');
+      const emptyHistory = document.getElementById('empty-history');
+      
+      if (drawHistory.length === 0) {
+        emptyHistory.classList.remove('hidden');
+        return;
+      }
+      
+      emptyHistory.classList.add('hidden');
+      historyList.innerHTML = '';
+      
+      drawHistory.forEach(item => {
+        const historyItem = document.createElement('div');
+        historyItem.className = 'history-item';
+        
+        // 找到对应的奖品图片
+        const prizeInfo = prizes.find(p => p.name === item.prize) || { image: 'images/prize/default.png' };
+        
+        historyItem.innerHTML = `
+          <div class="flex items-center">
+            <img src="${prizeInfo.image}" alt="${item.prize}" class="w-10 h-10 rounded mr-3">
+            <div>
+              <p class="font-semibold">${item.prize}</p>
+              <p class="text-sm text-gray-500">${item.date} ${item.time}</p>
+            </div>
+          </div>
+          <div class="text-right">
+            <p class="font-mono text-sm">${item.code}</p>
+            <button class="copy-history-code text-secondary hover:text-secondary/80 text-sm mt-1" data-code="${item.code}">
+              <i class="fa fa-copy mr-1"></i>复制
+            </button>
+          </div>
+        `;
+        
+        historyList.appendChild(historyItem);
+      });
+      
+      // 为复制按钮添加事件
+      document.querySelectorAll('.copy-history-code').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const code = e.currentTarget.getAttribute('data-code');
+          navigator.clipboard.writeText(code).then(() => {
+            const originalHTML = e.currentTarget.innerHTML;
+            e.currentTarget.innerHTML = '<i class="fa fa-check mr-1"></i>已复制';
+            e.currentTarget.classList.remove('text-secondary', 'hover:text-secondary/80');
+            e.currentTarget.classList.add('text-green-500');
+            
+            setTimeout(() => {
+              e.currentTarget.innerHTML = originalHTML;
+              e.currentTarget.classList.remove('text-green-500');
+              e.currentTarget.classList.add('text-secondary', 'hover:text-secondary/80');
+            }, 2000);
+          });
+        });
+      });
+    }
+
+    // 初始化页面
+    document.addEventListener('DOMContentLoaded', () => {
+      const spinBtn = document.getElementById('spin-btn');
+      const resultPanel = document.getElementById('result-panel');
+      const prizeImg = document.getElementById('prize-img');
+      const prizeName = document.getElementById('prize-name');
+      const codeEl = document.getElementById('code');
+      const copyBtn = document.getElementById('copy-btn');
+      const remainCount = document.getElementById('remain-count');
+      const countProgress = document.getElementById('count-progress');
+      const noChances = document.getElementById('no-chances');
+      const historyBtn = document.getElementById('history-btn');
+      const historyModal = document.getElementById('history-modal');
+      const closeHistory = document.getElementById('close-history');
+
+      let count = 3;
+      let isSpinning = false;
+
+      // 初始化抽奖记录
+      updateHistoryList();
+
+      // 抽奖按钮点击事件
+      spinBtn.addEventListener('click', () => {
+        if (count <= 0 || isSpinning) return;
+
+        // 减少抽奖次数
+        count--;
+        remainCount.textContent = count;
+        countProgress.style.width = `${(count / 3) * 100}%`;
+
+        // 如果次数用完，显示提示
+        if (count === 0) {
+          noChances.classList.remove('hidden');
+          spinBtn.classList.add('spin-btn-disabled');
+          spinBtn.textContent = '次数已用尽';
+        }
+
+        // 随机选择奖品
+        const randomIndex = Math.floor(Math.random() * prizes.length);
+        const prize = prizes[randomIndex];
+        const code = generateCode();
+
+        // 模拟抽奖动画
+        isSpinning = true;
+        spinBtn.textContent = '抽奖中...';
+        spinBtn.disabled = true;
+        
+        // 随机滚动效果
+        let currentIndex = 0;
+        const interval = setInterval(() => {
+          // 移除之前的高亮
+          document.querySelector(`[data-prize="${prizes[currentIndex % prizes.length].name}"]`)?.classList.remove('ring-2', 'ring-primary', 'scale-110');
+          
+          // 高亮下一个
+          currentIndex++;
+          const nextIndex = currentIndex % prizes.length;
+          document.querySelector(`[data-prize="${prizes[nextIndex].name}"]`)?.classList.add('ring-2', 'ring-primary', 'scale-110');
+        }, 100);
+
+        // 停止动画并显示结果
+        setTimeout(() => {
+          clearInterval(interval);
+          // 移除最后一个高亮
+          document.querySelector(`[data-prize="${prizes[currentIndex % prizes.length].name}"]`)?.classList.remove('ring-2', 'ring-primary', 'scale-110');
+          
+          // 高亮中奖奖品
+          document.querySelector(`[data-prize="${prize.name}"]`)?.classList.add('ring-2', 'ring-primary', 'scale-110');
+          
+          // 显示结果
+          prizeImg.src = prize.image;
+          prizeName.textContent = `获得 ${prize.name}`;
+          codeEl.textContent = code;
+          resultPanel.classList.remove('hidden');
+          
+          // 添加到抽奖记录
+          addHistory(prize.name, code);
+          
+          // 恢复按钮状态
+          spinBtn.textContent = count > 0 ? '开始抽奖' : '次数已用尽';
+          spinBtn.disabled = false;
+          isSpinning = false;
+        }, 3000);
+      });
+
+      // 复制按钮点击事件
+      copyBtn.addEventListener('click', copyCode);
+
+      // 抽奖记录按钮点击事件
+      historyBtn.addEventListener('click', () => {
+        historyModal.classList.remove('hidden');
+      });
+
+      // 关闭抽奖记录弹窗
+      closeHistory.addEventListener('click', () => {
+        historyModal.classList.add('hidden');
+      });
+
+      // 点击弹窗外部关闭
+      historyModal.addEventListener('click', (e) => {
+        if (e.target === historyModal) {
+          historyModal.classList.add('hidden');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
